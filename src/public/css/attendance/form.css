@@ -1,0 +1,156 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background: #000;
+}
+
+.header-inner {
+    margin-left: 20px;
+}
+
+.header-right {
+    display: flex;
+    gap: 35px;
+    /* ボタンの間隔 */
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.logout-button {
+    color: #fff;
+    padding: 8px 14px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    background-color: #000;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.application-button {
+    color: #fff;
+    padding: 8px 14px;
+    text-decoration: none;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 24px;
+}
+
+.attendance-button {
+    color: #fff;
+    padding: 8px 14px;
+    text-decoration: none;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 24px;
+}
+
+.listing-button {
+    color: #fff;
+    padding: 8px 14px;
+    text-decoration: none;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 24px;
+}
+
+.application-button.disabled {
+    pointer-events: none;
+    opacity: 0.5;
+    cursor: default;
+}
+
+
+/* ここまでヘッダー */
+
+
+.main-content {
+    background-color: #f0eff2;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    text-align: center;
+    padding-top: 120px;
+}
+
+/* 中身のコンテナ */
+.main-inner {
+    padding: 20px;
+}
+
+/* 見出しや文字を中央寄せ */
+.situation,
+.date,
+.time,
+.message {
+    margin: 10px 0;
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 50px;
+}
+
+.situation-button {
+    border: none;
+    font-size: 25px;
+    font-weight: bold;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: 0.3s;
+    background: #000;
+    color: #fff;
+    width: 200px;
+    height: 60px;
+    text-align: center;
+}
+
+.breaktime-button {
+    border: none;
+    font-size: 25px;
+    font-weight: bold;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: 0.3s;
+    background: #fff;
+    width: 200px;
+    height: 60px;
+    text-align: center;
+}
+
+.time {
+    font-size: 70px;
+    font-weight: bold;
+}
+
+.message {
+    margin-top: 50px;
+}
+
+.situation {
+    display: inline-block;
+    background-color: #c8c8c8;
+    font-size: 20px;
+    color: #696969;
+    padding: 10px 20px;
+    border-radius: 30px;
+    line-height: 1.5;
+}
+
+.date {
+    font-size: 35px;
+    font-weight: normal;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+}
+
+.situation-button,
+.breaktime-button {
+    width: 200px;
+    text-align: center;
+}

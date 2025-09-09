@@ -1,0 +1,163 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background: #000;
+}
+
+.header-inner {
+    margin-left: 20px;
+}
+
+.header-right {
+    display: flex;
+    gap: 35px;
+    /* ボタンの間隔 */
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.logout-button {
+    color: #fff;
+    padding: 8px 14px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    background-color: #000;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.application-button {
+    color: #fff;
+    padding: 8px 14px;
+    text-decoration: none;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 24px;
+}
+
+.attendance-button {
+    color: #fff;
+    padding: 8px 14px;
+    text-decoration: none;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 24px;
+}
+
+.listing-button {
+    color: #fff;
+    padding: 8px 14px;
+    text-decoration: none;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 24px;
+}
+
+.application-button.disabled {
+    pointer-events: none;
+    opacity: 0.5;
+    cursor: default;
+}
+
+
+/* ここまでヘッダー */
+
+
+.main-content {
+    background-color: #f0eff2;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    padding-top: 80px;
+    padding-bottom: 100px;
+}
+
+.main-inner {
+    width: 70%;
+    padding: 20px;
+}
+
+.main-title {
+    display: flex;
+    flex-direction: row;
+    font-size: 30px;
+}
+
+.month-selector {
+    margin-top: 30px;
+    background: #fff;
+    border-radius: 6px;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.attendance-date {
+    text-decoration: none;
+    font-size: 18px;
+    color: grey;
+    font-weight: bold;
+}
+
+.select-month {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.calendar-img {
+    width: 25px;
+    height: 25px;
+}
+
+.attendance-table {
+    margin-top: 40px;
+    background: #fff;
+    border-radius: 6px;
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+.attendance-column {
+    border-bottom: 3px solid #f0eff2;
+}
+
+.attendance-list {
+    border-bottom: 1px solid #f0eff2;
+}
+
+.attendance-whole {
+    font-weight: bold;
+}
+
+.date-list,
+.endtime-list,
+.starttime-list,
+.breaktime-list,
+.workminutes-list,
+.attendance-column-th {
+    padding: 10px 30px;
+    font-size: 18px;
+    text-align: center;
+    font-size: 18px;
+    word-break: break-all;
+    letter-spacing: 2px;
+    color: #737373;
+}
+
+.attendance-column-th {
+    letter-spacing: 5px;
+}
+
+.shoe-button {
+    text-decoration: none;
+    color: #000;
+    cursor: pointer;
+}
