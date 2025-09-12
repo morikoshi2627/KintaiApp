@@ -76,59 +76,64 @@ class AdminAttendanceController extends Controller
     }
 
     /* 新規作成画面 */
-    public function create(Request $request)
+    public function create($user, $date)
     {
-        $userId = $request->input('user');
-        $date   = $request->input('date');
+        $user = User::findOrFail($user);
 
-        $user = User::findOrFail($userId);
-
+        // 空の Attendance インスタンス
         $attendance = new Attendance([
             'user_id' => $user->id,
             'attendance_date' => $date,
         ]);
 
-        return view('admin.attendances.show', compact('attendance', 'user', 'date'));
-    }
+        $attendance->setRelation('breakTimes', collect());
 
+        return view('admin.attendances.show', compact('attendance'));
+    }
 
     /* 登録処理 */
     public function store(AdminAttendanceUpdateRequest $request)
     {
         $validated = $request->validated();
 
+        // attendance_date の日付部分のみ取得
+        $date = Carbon::parse($validated['attendance_date'])->toDateString(); // "Y-m-d"
+
         $attendance = Attendance::create([
             'user_id'         => $validated['user_id'],
             'attendance_date' => $validated['attendance_date'],
-            'start_time'      => $validated['start_time'],
-            'end_time'        => $validated['end_time'],
-            'request_reason'  => $validated['request_reason'],
+            'start_time'      => $validated['start_time'] ? Carbon::parse($date . ' ' . $validated['start_time']) : null,
+            'end_time'        => $validated['end_time']   ? Carbon::parse($date . ' ' . $validated['end_time'])   : null,
+            'request_reason' => $validated['request_reason'] ?? null,
         ]);
 
         // 休憩時間が入力されていたら登録
-        if (!empty($validated['break_start']) && !empty($validated['break_end'])) {
-            $attendance->breakTimes()->create([
-                'start_time' => $validated['break_start'],
-                'end_time'   => $validated['break_end'],
-            ]);
+        if (!empty($validated['break_start']) && is_array($validated['break_start'])) {
+            foreach ($validated['break_start'] as $key => $start) {
+                $end = $validated['break_end'][$key] ?? null;
+                if ($start && $end) {
+                    $attendance->breakTimes()->create([
+                        'start_time' => Carbon::parse($date . ' ' . $start),
+                        'end_time'   => Carbon::parse($date . ' ' . $end),
+                    ]);
+                }
+            }
         }
 
-        return redirect()->route('admin.attendances', ['date' => $attendance->attendance_date])
-            ->with('success', '勤怠を登録しました');
+        return redirect()->route('admin.attendances', ['date' => $attendance->attendance_date]);
     }
 
     /* 更新処理 */
     public function update(AdminAttendanceUpdateRequest $request, $id)
     {
         $attendance = Attendance::findOrFail($id);
-
         $validated = $request->validated();
 
-        $date = Carbon::parse($attendance->attendance_date)->format('Y-m-d');
+        $date = Carbon::parse($attendance->attendance_date)->toDateString();
         
         $attendance->update([
-            'start_time'     => Carbon::parse($date . ' ' . $validated['start_time'])->format('Y-m-d H:i:s'),
-            'end_time'       => Carbon::parse($date . ' ' . $validated['end_time'])->format('Y-m-d H:i:s'),
+            'start_time'     => Carbon::parse($date . ' ' . $validated['start_time']),
+            'end_time'       => Carbon::parse($date . ' ' . $validated['end_time']),
             'request_reason' => $validated['request_reason'],
         ]);
 
@@ -141,8 +146,8 @@ class AdminAttendanceController extends Controller
 
                 if (!empty($start) && !empty($end)) {
                     $attendance->breakTimes()->create([
-                        'start_time' => Carbon::parse($date . ' ' . $start)->format('Y-m-d H:i:s'),
-                        'end_time'   => Carbon::parse($date . ' ' . $end)->format('Y-m-d H:i:s'),
+                        'start_time' => Carbon::parse($date . ' ' . $start),
+                        'end_time'   => Carbon::parse($date . ' ' . $end),
                     ]);
                 }
             }

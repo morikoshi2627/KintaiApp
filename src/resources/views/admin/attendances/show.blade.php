@@ -38,9 +38,19 @@
             <h2 class="main-title">| 勤怠詳細 </h2>
 
             <div class="application-update">
-                <form id="update-form" method="POST" action="{{ route('admin.attendances.update', ['id' => $attendance->id]) }}" novalidate>
+                <form id="update-form"
+                    method="POST"
+                    action="{{ $attendance->id
+                ? route('admin.attendances.update', ['id' => $attendance->id])
+                : route('admin.attendances.store') }}"
+                    novalidate>
                     @csrf
+                    @if($attendance->id)
                     @method('PUT')
+                    @endif
+
+                    <input type="hidden" name="user_id" value="{{ $attendance->user_id }}">
+                    <input type="hidden" name="attendance_date" value="{{ $attendance->attendance_date }}">
 
                     <!-- 名前 -->
                     <div class="application-column">
@@ -155,7 +165,7 @@
 
                     <!-- 修正ボタン -->
                     <div class="button-area">
-                        <button class="correction-button" type="submit" form="update-form">修正</button>
+                        <button class="correction-button">修正</button>
                     </div>
                 </form>
             </div>
