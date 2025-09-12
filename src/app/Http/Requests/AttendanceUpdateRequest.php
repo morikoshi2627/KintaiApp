@@ -29,7 +29,7 @@ class AttendanceUpdateRequest extends FormRequest
             'end_time'   => ['required', 'date_format:H:i', 'after:start_time'],
 
             'break_start.*' => ['nullable', 'date_format:H:i'],
-            'break_end.*'   => ['nullable', 'date_format:H:i', 'after:break_start.*'],
+            'break_end.*'   => ['nullable', 'date_format:H:i'],
 
             'request_reason' => ['required'],
         ];
@@ -58,23 +58,76 @@ class AttendanceUpdateRequest extends FormRequest
             $breakStarts = $this->input('break_start', []);
             $breakEnds   = $this->input('break_end', []);
 
-            foreach ($breakStarts as $index => $breakStart) {
-                $breakEnd = $breakEnds[$index] ?? null;
+            // 休憩時間チェック
+            foreach ($breakStarts as $key => $breakStart) {
+                $breakEnd = $breakEnds[$key] ?? null;
 
-                if ($breakStart && $breakEnd) {
-                    $breakStartTime = Carbon::parse($breakStart);
-                    $breakEndTime   = Carbon::parse($breakEnd);
+                // 両方空ならスキップ
+                if (empty($breakStart) && empty($breakEnd)) {
+                    continue;
+                }
 
-                    if ($breakStartTime < $startTime || $breakEndTime > $endTime) {
+                // 空チェック
+                if (empty($breakStart)) {
+                    $validator->errors()->add(
+                        "break_start.$key",
+                        "休憩開始時間を入力してください"
+                    );
+                    continue;
+                }
+
+                if (empty($breakEnd)) {
+                    $validator->errors()->add(
+                        "break_end.$key",
+                        "休憩終了時間を入力してください"
+                    );
+                    continue;
+                }
+
+                $breakStartTime = Carbon::parse($breakStart);
+                $breakEndTime   = Carbon::parse($breakEnd);
+
+                // 出勤・退勤範囲外チェック
+                if ($breakStartTime < $startTime || $breakEndTime > $endTime) {
+                    $validator->errors()->add(
+                        "break_start.$key",
+                        "休憩時間が不適切な値です"
+                    );
+                }
+
+                // 開始より終了が前になっていないか
+                if ($breakEndTime < $breakStartTime) {
+                    $validator->errors()->add(
+                        "break_end.$key",
+                        "休憩終了時間は開始時間以降を指定してください"
+                    );
+                }
+            }
+
+            // 休憩同士の重複チェック
+            $times = [];
+            foreach ($breakStarts as $key => $breakStart) {
+                if (!$breakStart || !($breakEnds[$key] ?? null)) continue;
+                $times[] = [
+                    'start' => Carbon::parse($breakStart),
+                    'end'   => Carbon::parse($breakEnds[$key]),
+                    'key'   => $key
+                ];
+            }
+
+            for ($i = 0; $i < count($times); $i++) {
+                for ($j = $i + 1; $j < count($times); $j++) {
+                    if (
+                        $times[$i]['start'] < $times[$j]['end'] &&
+                        $times[$i]['end'] > $times[$j]['start']
+                    ) {
                         $validator->errors()->add(
-                            "break_start.$index",
-                            "休憩時間が不適切な値です"
+                            "break_start." . $times[$i]['key'],
+                            "休憩時間が重複しています"
                         );
-                    }
-                    if ($breakEndTime < $breakStartTime) {
                         $validator->errors()->add(
-                            "break_end.$index",
-                            "休憩終了時間は開始時間以降を指定してください"
+                            "break_start." . $times[$j]['key'],
+                            "休憩時間が重複しています"
                         );
                     }
                 }

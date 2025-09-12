@@ -145,23 +145,42 @@ class UserAttendanceController extends Controller
     }
 
     // 勤怠詳細表示
-    public function show($id)
+    public function show($idOrDate) // ★ 引数にid または 日付文字列が来る想定
     {
         $user = auth()->user();
 
+        // ★ Attendance が存在しない場合でも日付指定で詳細を開けるように修正
+        // id か 日付かを判定
         $attendance = Attendance::with(['breakTimes', 'attendanceRequests.requestBreakTimes'])
-            ->where('id', $id)
             ->where('user_id', $user->id)
-            ->firstOrFail();
+            ->when(is_numeric($idOrDate), function ($q) use ($idOrDate) {
+                $q->where('id', $idOrDate);
+            }, function ($q) use ($idOrDate) {
+                $q->whereDate('attendance_date', $idOrDate);
+            })
+            ->first();
 
-        $attendanceId = $attendance->id;
+        // ★ 勤怠がなければ仮オブジェクトを作成
+        if (!$attendance) {
+            $attendance = new Attendance([
+                'user_id' => $user->id,
+                'attendance_date' => is_numeric($idOrDate) ? now()->toDateString() : $idOrDate,
+                'start_time' => null,
+                'end_time' => null,
+            ]);
+            $attendance->exists = false; // DB 未保存フラグ
+        }
+
+        $attendanceId = $attendance->id ?? null;
 
         // 最新の修正申請（未承認のもの）
-        $pendingRequest = $attendance->attendanceRequests()
+        $pendingRequest = $attendance->exists
+            ? $attendance->attendanceRequests()
             ->where('status', 'pending')
             ->latest()
             ->with('requestBreakTimes')
-            ->first();
+            ->first()
+            : null;
 
         $displayData = (object) [
             'date' => $attendance->attendance_date,
@@ -170,7 +189,7 @@ class UserAttendanceController extends Controller
             'breakTimes' => $pendingRequest?->requestBreakTimes->isNotEmpty()
                 ? $pendingRequest->requestBreakTimes
                 : $attendance->breakTimes,
-            'newBreak' => (object) [ // 新規入力用（old対応）
+            'newBreak' => (object) [
                 'start' => old('break_start.new'),
                 'end'   => old('break_end.new'),
             ],
@@ -186,10 +205,43 @@ class UserAttendanceController extends Controller
         ));
     }
 
+    // 勤怠新規作成（未入力日の詳細画面へ）
+    public function create(Request $request)
+    {
+        $user = auth()->user();
+
+        // リクエストから日付を取得（指定がなければ今日）
+        $date = $request->input('date', now()->toDateString());
+
+        // 既にその日のデータがあれば再利用
+        $attendance = Attendance::firstOrCreate(
+            [
+                'user_id' => $user->id,
+                'attendance_date' => $date,
+            ],
+            [
+                'start_time' => null,
+                'end_time'   => null,
+            ]
+        );
+
+        // 詳細画面へリダイレクト
+        return redirect()->route('attendance.detail', ['id' => $attendance->id]);
+    }
+
     // 勤怠修正申請更新
     public function update(AttendanceUpdateRequest $request, $id): RedirectResponse
     {
-        $attendance = Attendance::with('attendanceRequests')->findOrFail($id);
+        // ★ Attendance が存在しない場合は firstOrCreate で作成
+        $attendance = Attendance::firstOrCreate(
+            ['id' => $id],
+            [
+                'user_id' => auth()->id(),
+                'attendance_date' => now()->toDateString(), // ★ 必要なら request から受け取る
+                'start_time' => null,
+                'end_time' => null,
+            ]
+        );
 
         $pendingRequest = $attendance->attendanceRequests()
             ->where('status', 'pending')
@@ -198,7 +250,7 @@ class UserAttendanceController extends Controller
 
         if ($pendingRequest) {
             return redirect()
-                ->route('attendance.detail', ['id' => $id])
+                ->route('attendance.detail', ['id' => $attendance->id])
                 ->with('error', '承認待ちのため修正はできません。');
         }
 
@@ -216,10 +268,10 @@ class UserAttendanceController extends Controller
             'status' => 'pending',
         ]);
 
-        // 既存休憩の修正申請
+        // 休憩修正申請
         if (isset($validated['break_start'], $validated['break_end'])) {
             foreach ($validated['break_start'] as $key => $start) {
-                if (!is_numeric($key)) continue; // 'new' はスキップ
+                if (!is_numeric($key)) continue;
                 $end = $validated['break_end'][$key] ?? null;
                 if (!$start || !$end) continue;
 
@@ -234,7 +286,7 @@ class UserAttendanceController extends Controller
             }
         }
 
-        // 新規休憩（休憩2）
+        // 新規休憩
         if (!empty($validated['break_start']['new'] ?? null) && !empty($validated['break_end']['new'] ?? null)) {
             RequestBreakTime::create([
                 'attendance_request_id' => $attendanceRequest->id,
@@ -246,6 +298,6 @@ class UserAttendanceController extends Controller
             ]);
         }
 
-        return redirect()->route('attendance.detail', ['id' => $id]);
+        return redirect()->route('attendance.detail', ['id' => $attendance->id]);
     }
 }

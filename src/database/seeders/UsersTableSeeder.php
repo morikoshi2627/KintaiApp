@@ -25,7 +25,7 @@ class UsersTableSeeder extends Seeder
 
 
         // ランダム一般ユーザー
-        $faker = Faker::create();
+        $faker = Faker::create('ja_JP');
         for ($i = 0; $i < 5; $i++) {
             User::create([
                 'name' => $faker->name,

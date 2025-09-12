@@ -54,7 +54,7 @@
             @endphp
 
             <div class="application-update">
-                <form id="update-form" method="POST" action="{{ route('attendance.update', ['id' => $attendance->id]) }}" novalidate>
+                <form id="update-form" method="POST" action="{{ route('attendance.update', ['id' => $attendance->id ?? 0]) }}" novalidate>
                     @csrf
                     @method('PUT')
 
@@ -135,6 +135,14 @@
                                     name="break_end[{{ $index }}]"
                                     value="{{ old('break_end.'.$index, $break->break_ended_at?->format('H:i') ?? $break->end_time?->format('H:i') ?? '') }}">
                             </div>
+                            <div class="error-wrapper">
+                                @error('break_start.'.$index)
+                                <div class="form-error">{{ $message }}</div>
+                                @enderror
+                                @error('break_end.'.$index)
+                                <div class="form-error">{{ $message }}</div>
+                                @enderror
+                            </div>
                         </div>
                     </div>
                     @endforeach
@@ -149,6 +157,16 @@
                                 <input class="application-input" type="time" name="break_start[new]" value="{{ $displayData->newBreak->start }}">
                                 <span class="application-span">〜</span>
                                 <input class="application-input" type="time" name="break_end[new]" value="{{ $displayData->newBreak->end }}">
+                            </div>
+                            <div class="error-wrapper">
+                                <div class="error-wrapper">
+                                    @error('break_start.new')
+                                    <div class="form-error">{{ $message }}</div>
+                                    @enderror
+                                    @error('break_end.new')
+                                    <div class="form-error">{{ $message }}</div>
+                                    @enderror
+                                </div>
                             </div>
                         </div>
                     </div>

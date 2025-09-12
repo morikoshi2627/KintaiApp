@@ -24,15 +24,5 @@ class AdminsTableSeeder extends Seeder
             'email' => 'admin@example.com',
             'password' => Hash::make('admin123'),
         ]);
-
-        // ランダム管理者
-        $faker = Faker::create();
-        for ($i = 0; $i < 2; $i++) {
-            Admin::create([
-                'name' => $faker->name,
-                'email' => $faker->unique()->safeEmail,
-                'password' => Hash::make('password'),
-            ]);
-        }
     }
 }

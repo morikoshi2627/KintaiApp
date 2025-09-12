@@ -12,11 +12,11 @@
 本アプリには、確認用の固定アカウントを用意しています。  
 以下のメールアドレスとパスワードでログインしてください。  
 
-1. 固定管理者名：管理者 太郎（認証済み）  
+1. 固定管理者名：管理者 太郎（メール認証済み）  
 - メールアドレス：admin@example.com  
 - パスワード：adminpass123  
   
-2. 固定ユーザー：一般ユーザー 太郎(認証済み)  
+2. 固定ユーザー：一般ユーザー 太郎(メール認証済み)  
 - メールアドレス：user@example.com  
 - パスワード：password123  
   
@@ -66,8 +66,8 @@
     php artisan migrate --seed  
 
 ### 開発環境
-- 商品一覧画面（トップ画面）: http://localhost/  
-- 会員登録画面： http://localhost/register/   
+- 管理者ログイン画面: http://localhost/admin/login  
+- 一般ユーザー会員登録画面： http://localhost/register/   
 - メール確認用（Mailhog）： http://localhost:8025/  
 - 管理ツール（phpMyAdmin）： http://localhost:8080/  
   - ユーザー名: `KintaiApp_user`  

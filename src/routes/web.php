@@ -65,6 +65,8 @@ Route::post('/stamp_correction_request/store', [UserAttendanceRequestController:
 Route::get('/stamp_correction_request/{id}', [UserAttendanceRequestController::class, 'show'])
   ->name('attendance_request.show');
 
+Route::get('/attendance/create', [UserAttendanceController::class, 'create'])->name('attendance.create');
+
 /*
 |--------------------------------------------------------------------------
 | 管理者画面
@@ -84,8 +86,14 @@ Route::middleware('auth:admin')->prefix('admin')->name('admin.')->group(
 
 // 勤怠一覧
 Route::get('/attendances/list', [AdminAttendanceController::class, 'index'])->name('attendances');
-Route::get('/attendances/{id}', [AdminAttendanceController::class, 'show'])->name('attendance.detail');
-Route::put('/attendances/{id}', [AdminAttendanceController::class, 'update'])->name('attendance.update');
+
+// 勤怠新規作成
+Route::get('/attendances/create/{user}/{date}', [AdminAttendanceController::class, 'create'])->name('attendances.create');
+Route::post('/attendances', [AdminAttendanceController::class, 'store'])->name('attendances.store');
+
+Route::get('/attendances/{id}', [AdminAttendanceController::class, 'show'])->name('attendances.show');
+
+Route::put('/attendances/{id}', [AdminAttendanceController::class, 'update'])->name('attendances.update');
 
 // スタッフ一覧
 Route::get('/admin/staff/list', [AdminStaffController::class, 'index'])->name('users');

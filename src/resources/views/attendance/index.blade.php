@@ -82,16 +82,24 @@
                         <td class="starttime-list">{{ $attendance?->start_time?->format('H:i') ?? '' }}</td>
                         <td class="endtime-list">{{ $attendance?->end_time?->format('H:i') ?? '' }}</td>
                         <td class="breaktime-list">
-                            {{ $attendance ? sprintf('%d:%02d', intdiv($attendance->breakMinutes, 60), $attendance->breakMinutes % 60) : '' }}
+                            @if($attendance)
+                            {{ sprintf('%d:%02d', intdiv($attendance->breakMinutes, 60), $attendance->breakMinutes % 60) }}
+                            @endif
                         </td>
                         <td class="workminutes-list">
-                            {{ $attendance ? sprintf('%d:%02d', intdiv($attendance->workMinutes, 60), $attendance->workMinutes % 60) : '' }}
+                            @if($attendance)
+                            {{ sprintf('%d:%02d', intdiv($attendance->workMinutes, 60), $attendance->workMinutes % 60) }}
+                            @endif
                         </td>
                         <td class="show-list">
                             @if($attendance)
                             <a class="shoe-button" href="{{ route('attendance.detail', ['id' => $attendance->id]) }}">詳 細</a>
                             @else
-                            <span class="no-data">詳 細</span>
+                            <!-- 存在しない日は「新規作成リンク」 -->
+                            <a class="show-button"
+                                href="{{ route('attendance.create', ['date' => $date->toDateString()]) }}">
+                                詳 細
+                            </a>
                             @endif
                         </td>
                     </tr>
