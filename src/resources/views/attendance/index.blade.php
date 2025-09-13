@@ -93,7 +93,7 @@
                         </td>
                         <td class="show-list">
                             @if($attendance)
-                            <a class="shoe-button" href="{{ route('attendance.detail', ['id' => $attendance->id]) }}">詳 細</a>
+                            <a class="show-button" href="{{ route('attendance.detail', ['id' => $attendance->id]) }}">詳 細</a>
                             @else
                             <!-- 存在しない日は「新規作成リンク」 -->
                             <a class="show-button"
