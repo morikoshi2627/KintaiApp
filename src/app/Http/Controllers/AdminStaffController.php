@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 
+
 class AdminStaffController extends Controller
 {
     /* スタッフ一覧 */
@@ -18,7 +19,9 @@ class AdminStaffController extends Controller
         return view('admin.user.index', compact('users'));
     }
 
+    /* 特定スタッフの勤怠一覧 */
     public function attendances($user)
-    { /* 特定スタッフの勤怠一覧 */
+    {
+
     }
 }

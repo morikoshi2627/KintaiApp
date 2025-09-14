@@ -92,17 +92,6 @@
                             {{ sprintf('%d:%02d', intdiv($attendance->workMinutes, 60), $attendance->workMinutes % 60) }}
                             @endif
                         </td>
-
-                        <!-- <td class="breaktime-list">
-                            @if($attendance)
-                            {{ sprintf('%d:%02d', intdiv($attendance->breakMinutes, 60), $attendance->breakMinutes % 60) }}
-                            @endif
-                        </td>
-                        <td class="workminutes-list">
-                            @if($attendance)
-                            {{ sprintf('%d:%02d', intdiv($attendance->workMinutes, 60), $attendance->workMinutes % 60) }}
-                            @endif
-                        </td> -->
                         <td class="show-list">
                             @if($attendance)
                             <a class="show-button" href="{{ route('attendance.detail', ['id' => $attendance->id]) }}">詳 細</a>

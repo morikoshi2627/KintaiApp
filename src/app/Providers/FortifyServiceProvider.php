@@ -15,6 +15,8 @@ use Laravel\Fortify\Fortify;
 // use Illuminate\Support\Facades\Hash;
 // use Illuminate\Support\Facades\Validator;
 // use App\Models\User;
+use Laravel\Fortify\Http\Requests\LoginRequest;
+use Illuminate\Support\Facades\Auth;
 
 class FortifyServiceProvider extends ServiceProvider
 {
@@ -47,5 +49,27 @@ class FortifyServiceProvider extends ServiceProvider
             return Limit::perMinute(10)->by($email . $request->ip());
         });
 
+
+        // Fortify の LoginResponse をカスタマイズ
+        Fortify::authenticateUsing(function (LoginRequest $request) {
+            $credentials = $request->only('email', 'password');
+
+            // hidden input "guard" で判定
+            $guard = $request->input('guard', 'web');
+
+            if (Auth::guard($guard)->attempt($credentials, $request->boolean('remember'))) {
+                $request->session()->regenerate();
+
+                // 管理者なら管理者トップへ
+                if ($guard === 'admin') {
+                    return redirect()->intended('/admin/attendances');
+                }
+
+                // 一般ユーザー
+                return Auth::guard($guard)->user();
+            }
+
+            return null;
+        });
     }
 }

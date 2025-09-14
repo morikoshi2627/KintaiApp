@@ -96,11 +96,11 @@ Route::get('/attendances/{id}', [AdminAttendanceController::class, 'show'])->nam
 Route::put('/attendances/{id}', [AdminAttendanceController::class, 'update'])->name('attendances.update');
 
 // スタッフ一覧
-Route::get('/admin/staff/list', [AdminStaffController::class, 'index'])->name('users');
+Route::get('/staff/list', [AdminStaffController::class, 'index'])->name('users');
 
 // スタッフ別勤怠一覧
-Route::get('/admin/attendance/staff/{id}', [AdminStaffAttendanceController::class, 'index'])->name('user.attendances');
-Route::get('/admin/attendance/staff/{id}/export', [AdminStaffAttendanceController::class, 'export'])->name('user.attendances.export');
+Route::get('/attendance/staff/{id}', [AdminStaffAttendanceController::class, 'index'])->name('user.attendances');
+Route::get('/attendance/staff/{id}/export', [AdminStaffAttendanceController::class, 'export'])->name('user.attendances.export');
 
 // 修正申請一覧
 Route::get('/stamp_correction_request/list', [AdminAttendanceRequestController::class, 'index'])->name('requests');

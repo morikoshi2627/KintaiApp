@@ -28,7 +28,8 @@
 
             <form class="login-form" method="POST" action="{{ route('admin.login.store') }}" novalidate>
                 @csrf
-
+                <input type="hidden" name="guard" value="admin">
+                
                 <div class="input-area">
                     <div class="form-group">
                         <label class="form-label" for="email">メールアドレス</label>

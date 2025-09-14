@@ -53,7 +53,7 @@
                         <td class="name-list">{{ $user->name }}</td>
                         <td class="meil-list">{{ $user->email }}</td>
                         <td class="show-list">
-                            <a class="show-button" href="{{ route('admin.user.attendances', $user->id) }}">詳 細</a>
+                            <a class="show-button" href="{{ route('admin.user.attendances', ['id' => $user->id]) }}">詳 細</a>
                         </td>
                     </tr>
                     @endforeach
