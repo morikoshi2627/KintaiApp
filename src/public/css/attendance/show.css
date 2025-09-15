@@ -86,14 +86,6 @@
     text-align: left;
 }
 
-/* 白枠コンテナ
-.application-update {
-    margin-top: 30px;
-    background: #fff;
-    border-radius: 6px;
-    width: 100%;
-    padding: 20px 0;
-} */
  .application-update {
      position: relative;
      /* ボタン配置の基準にする */

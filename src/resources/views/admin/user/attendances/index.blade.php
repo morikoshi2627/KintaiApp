@@ -39,7 +39,11 @@
             <h2 class="main-title">| {{ $user->name }}さんの勤怠 </h2>
 
             <div class="month-selector">
-                <a class="attendance-date" href="{{ route('attendance.list', ['year' => $currentMonth->copy()->subMonth()->year, 'month' => $currentMonth->copy()->subMonth()->month]) }}">
+                <a class="attendance-date" href="{{ route('admin.user.attendances',[
+           'id' => $user->id,
+           'year' => $currentMonth->copy()->subMonth()->year,
+           'month' => $currentMonth->copy()->subMonth()->month
+       ]) }}">
                     ←前月
                 </a>
                 <div class="calendar-select-wrapper">
@@ -48,7 +52,11 @@
                     <span class="select-month">{{ $currentMonth->format('Y/m') }}</span>
                 </div>
 
-                <a class="attendance-date" href="{{ route('attendance.list', ['year' => $currentMonth->copy()->addMonth()->year, 'month' => $currentMonth->copy()->addMonth()->month]) }}">
+                <a class="attendance-date" href="{{ route('admin.user.attendances', [
+           'id' => $user->id,
+           'year' => $currentMonth->copy()->addMonth()->year,
+           'month' => $currentMonth->copy()->addMonth()->month
+       ]) }}">
                     翌月→
                 </a>
             </div>
@@ -74,29 +82,17 @@
                         <td class="date-list">{{ $date->translatedFormat('m/d(D)') }}</td>
                         <td class="starttime-list">{{ $attendance?->start_time?->format('H:i') ?? '' }}</td>
                         <td class="endtime-list">{{ $attendance?->end_time?->format('H:i') ?? '' }}</td>
-                        
-                        <td class="breaktime-list">
-                            @if($attendance && ($attendance->start_time || $attendance->end_time))
-                            {{ sprintf('%d:%02d', intdiv($attendance->breakMinutes, 60), $attendance->breakMinutes % 60) }}
-                            @endif
-                        </td>
-                        <td class="workminutes-list">
-                            @if($attendance && ($attendance->start_time || $attendance->end_time))
-                            {{ sprintf('%d:%02d', intdiv($attendance->workMinutes, 60), $attendance->workMinutes % 60) }}
-                            @endif
-                        </td>
 
-                        <!-- 
                         <td class="breaktime-list">
-                            @if($attendance !== null)
+                            @if($attendance && ($attendance->start_time || $attendance->end_time))
                             {{ sprintf('%d:%02d', intdiv($attendance->breakMinutes, 60), $attendance->breakMinutes % 60) }}
                             @endif
                         </td>
                         <td class="workminutes-list">
-                            @if($attendance !== null)
+                            @if($attendance && ($attendance->start_time || $attendance->end_time))
                             {{ sprintf('%d:%02d', intdiv($attendance->workMinutes, 60), $attendance->workMinutes % 60) }}
                             @endif
-                        </td> -->
+                        </td>
                         <td class="show-list">
                             @if($attendance)
                             <a class="show-button" href="{{ route('admin.attendances.show', ['id' => $attendance->id]) }}">詳 細</a>
@@ -111,6 +107,13 @@
                     @endforeach
                 </tbody>
             </table>
+            <div class="csv-export-wrapper">
+                <form method="GET" action="{{ route('admin.user.attendances.export', ['id' => $user->id]) }}">
+                    <input type="hidden" name="year" value="{{ $currentMonth->year }}">
+                    <input type="hidden" name="month" value="{{ $currentMonth->month }}">
+                    <button type="submit" class="csv-export-button">CSV出力</button>
+                </form>
+            </div>
         </div>
     </main>
 </body>

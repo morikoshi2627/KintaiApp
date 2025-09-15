@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class Attendance extends Model
 {
@@ -23,6 +24,34 @@ class Attendance extends Model
         'start_time'      => 'datetime:H:i',  // 時刻型（Carbon）
         'end_time'        => 'datetime:H:i',  // 時刻型（Carbon）
     ];
+
+    // 休憩時間（分単位）
+    public function getBreakMinutesAttribute()
+    {
+        return $this->breakTimes->sum(function ($break) {
+            if ($break->start_time && $break->end_time) {
+                return Carbon::parse($break->end_time)->diffInMinutes(Carbon::parse($break->start_time));
+            }
+            return 0;
+        });
+    }
+
+    // 勤務時間（分単位）
+    public function getWorkMinutesAttribute()
+    {
+        if (!$this->start_time || !$this->end_time) {
+            return 0;
+        }
+
+        $start = Carbon::parse($this->start_time);
+        $end   = Carbon::parse($this->end_time);
+
+        $workMinutes = $end->diffInMinutes($start);
+
+        return $workMinutes - $this->breakMinutes;
+    }
+
+
 
     public function user()
     {

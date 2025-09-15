@@ -1,0 +1,184 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background: #000;
+}
+
+.header-inner {
+    margin-left: 20px;
+}
+
+.header-right {
+    display: flex;
+    gap: 35px;
+    /* ボタンの間隔 */
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.logout-button {
+    color: #fff;
+    padding: 8px 14px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    background-color: #000;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.application-button {
+    color: #fff;
+    padding: 8px 14px;
+    text-decoration: none;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 24px;
+}
+
+.attendance-button {
+    color: #fff;
+    padding: 8px 14px;
+    text-decoration: none;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 24px;
+}
+
+.listing-button {
+    color: #fff;
+    padding: 8px 14px;
+    text-decoration: none;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 24px;
+}
+
+.application-button.disabled {
+    pointer-events: none;
+    opacity: 0.5;
+    cursor: default;
+}
+
+/* ここまでヘッダー */
+
+.main-content {
+    background-color: #f0eff2;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    padding-top: 80px;
+    padding-bottom: 100px;
+}
+
+.main-inner {
+    width: 70%;
+    padding: 20px;
+}
+
+.main-title {
+    display: flex;
+    flex-direction: row;
+    font-size: 30px;
+}
+
+/* 承認待ち・承認済み */
+.filter-tabs {
+    margin-top: 60px;
+    display: flex;
+    gap: 30px;
+    font-size: 18px;
+}
+
+.filter-tabs-a {
+    text-decoration: none;
+    color: #333;
+    margin-left: 50px;
+}
+
+/* 選択中だけ太字にする */
+.filter-tabs-a.active {
+    font-weight: bold;
+}
+
+.filter-tabs-hr {
+    border: none;
+    border-top: 1px solid #000000;
+    margin: 10px 0;
+}
+
+/* 白枠コンテナ */
+.application-update {
+    margin-top: 50px;
+    background: #fff;
+    border-radius: 6px;
+    width: 100%;
+}
+
+/* 下線 */
+.application-update-table {
+    border-collapse: collapse;
+    /* 二重線を防ぐ */
+    width: 100%;
+}
+
+.application-update-tr {
+    border-bottom: 4px solid #f0eff2;
+    padding: 20px;
+    text-align: center;
+}
+
+.application-update-th,
+.application-update-td {
+    text-align: left;
+    padding: 10px 30px;
+    color: #737373;
+    font-weight: bold;
+}
+
+.application-update-tbody {
+    border-bottom: 2px solid #f0eff2;
+}
+
+.detail-button {
+    text-decoration: none;
+    color: #000000;
+    font-weight: bold;
+}
+
+.message-colspan {
+    font-size: 18px;
+    font-weight: bold;
+    padding: 10px 30px;
+    color: #737373;
+}
+
+/* PC幅（1400〜1540px）調整 */
+@media (min-width: 1400px) and (max-width: 1540px) {
+    .main-inner {
+        width: 70%;
+    }
+
+    .application-column {
+        max-width: 1000px;
+    }
+}
+
+/* タブレット以下 */
+@media (max-width: 1024px) {
+    .application-column {
+        max-width: 90%;
+        /* 横幅を広めにして崩れ防止 */
+    }
+}
+
+/* スマホサイズ */
+@media (max-width: 768px) {
+    .application-column {
+        padding: 15px;
+        max-width: 95%;
+    }
+}

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Attendance;
 use Carbon\Carbon;
 use App\Models\User;
+use Illuminate\Support\Facades\Response;
 
 class AdminStaffAttendanceController extends Controller
 {
@@ -51,8 +52,48 @@ class AdminStaffAttendanceController extends Controller
         return view('admin.user.attendances.index', compact('user', 'currentMonth', 'dates', 'attendancesByDate'));
     }
 
-    public function export($user)
-    { /* CSV出力 */
+    // CSVボタン
+    public function export($id, Request $request)
+    {
+        $year = $request->query('year');
+        $month = $request->query('month');
+
+        $user = User::findOrFail($id);
+
+        // 当該月の勤怠データを取得
+        $attendances = $user->attendances()
+            ->whereYear('attendance_date', $year)
+            ->whereMonth('attendance_date', $month)
+            ->orderBy('attendance_date')
+            ->get();
+
+        // CSVのヘッダー
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="attendance_' . $user->id . '_' . $year . '_' . $month . '.csv"',
+        ];
+
+        $columns = ['日付', '出勤時間', '退勤時間', '休憩時間', '勤務合計時間'];
+
+        $callback = function () use ($attendances, $columns) {
+            $file = fopen('php://output', 'w');
+            fputcsv($file, $columns);
+
+            foreach ($attendances as $attendance) {
+                $row = [
+                    $attendance->attendance_date->format('Y-m-d'),
+                    $attendance->start_time?->format('H:i') ?? '',
+                    $attendance->end_time?->format('H:i') ?? '',
+                    sprintf('%d:%02d', intdiv($attendance->breakMinutes, 60), $attendance->breakMinutes % 60),
+                    sprintf('%d:%02d', intdiv($attendance->workMinutes, 60), $attendance->workMinutes % 60),
+                ];
+                fputcsv($file, $row);
+            }
+
+            fclose($file);
+        };
+
+        return Response::stream($callback, 200, $headers);
     }
 
 }

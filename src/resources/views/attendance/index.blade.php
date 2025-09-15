@@ -25,11 +25,7 @@
             <a class="attendance-button" href="{{ route('attendance.index') }}">勤怠</a>
             <a class="listing-button" href="{{ route('attendance.list') }}">勤怠一覧</a>
 
-            @if($attendanceId)
             <a class="application-button" href="{{ route('attendance_request.list') }}">申請</a>
-            @else
-            <span class="application-button disabled">申請</span>
-            @endif
 
             <form class="form-actions" method="POST" action="{{ url('/logout') }}">
                 @csrf

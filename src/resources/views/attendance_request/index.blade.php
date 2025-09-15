@@ -102,7 +102,7 @@
                         </tr>
                         @empty
                         <tr>
-                            <td class="message-colspan" colspan="6">承認済みはまだありません。</td>
+                            <td class="message-colspan" colspan="6">データがありません。</td>
                         </tr>
                         @endforelse
                     </tbody>
