@@ -1,0 +1,42 @@
+.main-inner {
+  text-align: center;
+  margin-top: 10%;
+}
+
+.message-1 {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.message-2 {
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: 5px;
+  margin-bottom: 50px;
+}
+
+.button-primary {
+  text-decoration: none;
+  background: lightgray;
+  border: 1px solid #61656b;
+  border-radius: 3px;
+  padding: 10px 30px;
+  color: #000;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.text-success {
+  margin-top: 25px;
+  color: darkgreen;
+}
+
+.button-resend {
+  border: none;
+  background: none;
+  color: #2d99ff;
+  font-size: 16px;
+  margin-top: 50px;
+  font-weight: bold;
+  cursor: pointer;
+}
