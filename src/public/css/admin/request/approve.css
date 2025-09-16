@@ -152,7 +152,7 @@
 }
 
 .application-p-span {
-    margin-right: 100px;
+    margin-right: 95px;
 }
 
 .application-textarea {
@@ -164,8 +164,6 @@
     resize: vertical;
     font-size: 18px;
     font-weight: bold;
-    border: 1px solid #c8c8c8;
-    border-radius: 4px;
     margin-bottom: 15px;
     box-sizing: border-box;
 }
@@ -191,12 +189,13 @@
     right: 20px;
 }
 
+/* 承認ボタン */
 .correction-button {
     background: #000;
     color: #fff;
     border: none;
     border-radius: 4px;
-    padding: 8px 40px;
+    padding: 8px 50px;
     font-size: 18px;
     cursor: pointer;
     transition: background 0.3s;
@@ -210,6 +209,6 @@
     border-radius: 4px;
     padding: 8px 40px;
     font-size: 18px;
-    cursor: pointer;
-    transition: background 0.3s;
+    display: inline-block;
+    margin: 0;
 }

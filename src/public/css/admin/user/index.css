@@ -1,65 +1,65 @@
 .header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 20px;
-  background: #000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background: #000;
 }
 
 .header-inner {
-  margin-left: 20px;
+    margin-left: 20px;
 }
 
 .header-right {
-  display: flex;
-  gap: 35px;
-  /* ボタンの間隔 */
-  align-items: center;
-  flex-wrap: wrap;
+    display: flex;
+    gap: 35px;
+    /* ボタンの間隔 */
+    align-items: center;
+    flex-wrap: wrap;
 }
 
 .logout-button {
-  color: #fff;
-  padding: 8px 14px;
-  text-decoration: none;
-  border: none;
-  cursor: pointer;
-  background-color: #000;
-  font-size: 24px;
-  font-weight: bold;
+    color: #fff;
+    padding: 8px 14px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    background-color: #000;
+    font-size: 24px;
+    font-weight: bold;
 }
 
 .application-button {
-  color: #fff;
-  padding: 8px 14px;
-  text-decoration: none;
-  cursor: pointer;
-  font-weight: bold;
-  font-size: 24px;
+    color: #fff;
+    padding: 8px 14px;
+    text-decoration: none;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 24px;
 }
 
 .attendance-button {
-  color: #fff;
-  padding: 8px 14px;
-  text-decoration: none;
-  cursor: pointer;
-  font-weight: bold;
-  font-size: 24px;
+    color: #fff;
+    padding: 8px 14px;
+    text-decoration: none;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 24px;
 }
 
 .listing-button {
-  color: #fff;
-  padding: 8px 14px;
-  text-decoration: none;
-  cursor: pointer;
-  font-weight: bold;
-  font-size: 24px;
+    color: #fff;
+    padding: 8px 14px;
+    text-decoration: none;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 24px;
 }
 
 .application-button.disabled {
-  pointer-events: none;
-  opacity: 0.5;
-  cursor: default;
+    pointer-events: none;
+    opacity: 0.5;
+    cursor: default;
 }
 
 /* ここまでヘッダー */
@@ -139,11 +139,9 @@
     font-weight: bold;
 }
 
-.date-list,
-.endtime-list,
-.starttime-list,
-.breaktime-list,
-.workminutes-list,
+.meil-list,
+.name-list,
+.show-list,
 .attendance-column-th {
     padding: 10px 30px;
     font-size: 18px;

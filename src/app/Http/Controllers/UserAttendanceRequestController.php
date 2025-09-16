@@ -13,18 +13,23 @@ class UserAttendanceRequestController extends Controller
 
     public function index(Request $request)
     {
-        $status = $request->query('status', 'pending'); // クエリパラメータが無ければ "pending" をデフォルトにして承認待ち or 承認済み
+        $status = $request->query('status', 'pending'); // デフォルトは承認待ち
 
         $query = AttendanceRequest::with(['attendance', 'user'])
-            ->where('user_id', Auth::id());
+            ->where('attendance_requests.user_id', Auth::id()); // ← テーブル名を明示
 
         if ($status === 'pending') {
-            $query->where('status', 'pending');
+            $query->where('attendance_requests.status', 'pending'); // ← テーブル名を明示
         } elseif ($status === 'approved') {
-            $query->where('status', 'approved');
+            $query->where('attendance_requests.status', 'approved'); // ← テーブル名を明示
         }
 
-        $requests = $query->latest()->paginate(10);
+        // attendance テーブルを join して日付で古い順に並べ替え
+        $requests = $query
+            ->join('attendances', 'attendance_requests.attendance_id', '=', 'attendances.id')
+            ->orderBy('attendances.attendance_date', 'asc')
+            ->select('attendance_requests.*') // AttendanceRequest カラムのみ取得
+            ->get();
 
         return view('attendance_request.index', compact('requests', 'status'));
     }

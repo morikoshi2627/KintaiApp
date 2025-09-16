@@ -100,7 +100,7 @@
                             </td>
 
                             <!-- 詳細ボタン -->
-                            <td>
+                            <td class="application-update-td">
                                 <a class="detail-button" href="{{ route('admin.request.detail', $req->id) }}">詳 細</a>
                             </td>
                         </tr>

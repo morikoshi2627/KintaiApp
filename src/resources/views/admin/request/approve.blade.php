@@ -110,20 +110,20 @@
                     </div>
                     <div class="input-area">
                         <div class="input-wrapper">
-                            <p class="application-p">
-                                @php
-                                $start = isset($breaks[$i]) && $breaks[$i]->break_started_at
-                                ? \Carbon\Carbon::parse($breaks[$i]->break_started_at)->format('H:i')
-                                : '';
-                                $end = isset($breaks[$i]) && $breaks[$i]->break_ended_at
-                                ? \Carbon\Carbon::parse($breaks[$i]->break_ended_at)->format('H:i')
-                                : '';
-                                @endphp
+                            @php
+                            $start = isset($breaks[$i]) && $breaks[$i]->break_started_at
+                            ? \Carbon\Carbon::parse($breaks[$i]->break_started_at)->format('H:i')
+                            : '';
+                            $end = isset($breaks[$i]) && $breaks[$i]->break_ended_at
+                            ? \Carbon\Carbon::parse($breaks[$i]->break_ended_at)->format('H:i')
+                            : '';
+                            @endphp
 
-                                {{ $start }}
-                                @if($start && $end)
-                                <span class="application-span">〜</span>
-                                @endif
+                            <p class="application-input">{{ $start }}</p>
+                            @if($start && $end)
+                            <span class="application-span">〜</span>
+                            @endif
+                            <p class="application-input">
                                 {{ $end }}
                             </p>
                         </div>

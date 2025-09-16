@@ -11,7 +11,7 @@ class AdminAttendanceRequestController extends Controller
 {
     public function index(Request $request)
     {
-        $status = $request->query('status'); // 承認待ち or 承認済み
+        $status = $request->query('status', 'pending');
 
         $query = AttendanceRequest::with(['attendance', 'user']);
 
@@ -53,10 +53,26 @@ class AdminAttendanceRequestController extends Controller
         // 勤怠情報を申請内容で更新する
         if ($attendanceRequest->attendance) {
             $attendance = $attendanceRequest->attendance;
-            $attendance->start_time   = $attendanceRequest->start_time;
-            $attendance->end_time     = $attendanceRequest->end_time;
-            $attendance->break_time   = $attendanceRequest->break_time;
+
+            // 出勤・退勤
+            $attendance->start_time = $attendanceRequest->requested_start_time
+                ?? $attendance->start_time;
+            $attendance->end_time = $attendanceRequest->requested_end_time
+                ?? $attendance->end_time;
+
             $attendance->save();
+
+            // 休憩時間の更新（いったん全部消して入れ直す）
+            $attendance->breakTimes()->delete();
+
+            if ($attendanceRequest->requestBreakTimes) {
+                foreach ($attendanceRequest->requestBreakTimes as $break) {
+                    $attendance->breakTimes()->create([
+                        'start_time' => $break->break_started_at,
+                        'end_time'   => $break->break_ended_at,
+                    ]);
+                }
+            }
         }
 
         return redirect()->route('admin.requests', ['status' => 'approved']);

@@ -51,8 +51,21 @@ class Attendance extends Model
         return $workMinutes - $this->breakMinutes;
     }
 
+    // 「承認済みの備考」を簡単に引けるように アクセサ
+    public function latestApprovedRequest()
+    {
+        return $this->hasOne(AttendanceRequest::class)
+            ->where('status', 'approved')
+            ->latestOfMany();
+    }
 
+    public function getRequestReasonAttribute()
+    {
+        return optional($this->latestApprovedRequest)->request_reason;
+    }
 
+    // リレーション
+    
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -75,7 +88,7 @@ class Attendance extends Model
         return $this->hasMany(RequestBreakTime::class);
     }
 
-    public function request()
+    public function attendanceRequest()
     {
         return $this->hasOne(AttendanceRequest::class);
     }
