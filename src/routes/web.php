@@ -10,6 +10,8 @@ use App\Http\Controllers\AdminAttendanceController;
 use App\Http\Controllers\AdminStaffController;
 use App\Http\Controllers\AdminStaffAttendanceController;
 use App\Http\Controllers\AdminAttendanceRequestController;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,6 +34,23 @@ use App\Http\Controllers\AdminAttendanceRequestController;
 Route::get('/register', [UserAuthRegisterController::class, 'create'])->name('user.register');
 Route::post('/register', [UserAuthRegisterController::class, 'store']);
 
+// 認証が必要なルート
+Route::get('/email/verify', function () {
+  return view('auth.verify-email');
+})->middleware('auth')->name('verification.notice');
+
+// 認証リンクからアクセスしたとき
+Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+  $request->fulfill();
+  return redirect('/attendance');
+})->middleware(['auth', 'signed'])->name('verification.verify');
+
+// 認証メール再送
+Route::post('/email/verification-notification', function (Request $request) {
+  $request->user()->sendEmailVerificationNotification();
+  return back()->with('status', 'verification-link-sent');
+})->middleware(['auth', 'throttle:6,1'])->name('verification.send');
+
 // ログイン
 Route::get('/login', [UserAuthLoginController::class, 'create'])->name('login');
 Route::post('/login', [UserAuthLoginController::class, 'store']);
@@ -40,7 +59,7 @@ Route::post('/login', [UserAuthLoginController::class, 'store']);
 Route::post('/logout', [UserAuthLoginController::class, 'destroy'])->name('logout');
 
 // 認証必須ルート（一般ユーザー）
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
 
 // 出勤登録
 Route::get('/attendance', [UserAttendanceController::class, 'index'])->name('attendance.index');

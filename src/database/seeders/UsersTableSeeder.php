@@ -6,6 +6,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Faker\Factory as Faker;
 use App\Models\User;
+use Carbon\Carbon;
 
 class UsersTableSeeder extends Seeder
 {
@@ -21,6 +22,7 @@ class UsersTableSeeder extends Seeder
             'name' => '一般ユーザー 太郎',
             'email' => 'user@example.com',
             'password' => Hash::make('password123'),
+            'email_verified_at' => Carbon::now(),
         ]);
 
 
@@ -31,6 +33,7 @@ class UsersTableSeeder extends Seeder
                 'name' => $faker->name,
                 'email' => $faker->unique()->safeEmail,
                 'password' => Hash::make('password'),
+                'email_verified_at' => null,
             ]);
         }
     }

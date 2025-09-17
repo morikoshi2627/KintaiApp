@@ -25,6 +25,8 @@ class UserAuthRegisterController extends Controller
             'password' => Hash::make($request->input('password')),
         ]);
 
+        // 登録後に自動でメール認証通知
+        $user->sendEmailVerificationNotification();
 
         // 作成後すぐログイン状態にする
         Auth::login($user);

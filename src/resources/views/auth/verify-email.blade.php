@@ -13,7 +13,8 @@
             <p class="message-2">メール認証を完了してください。</p>
         </div>
 
-        <a class="button-primary" href="{{ $verifyUrl }}" target="_blank">認証はこちらから</a>
+        <!-- 開発確認用に表示 -->
+        <a class="button-primary" href="http://localhost:8025" target="_blank">認証はこちらから</a>
 
         @if (session('status') == 'verification-link-sent')
         <p class="text-success">新しい認証リンクを送信しました！</p>
@@ -23,4 +24,4 @@
             @csrf
             <button class="button-resend" type="submit">認証メールを再送する</button>
         </form>
-    @endsection
+        @endsection

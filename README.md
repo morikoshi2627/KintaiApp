@@ -12,7 +12,7 @@
 本アプリには、確認用の固定アカウントを用意しています。  
 以下のメールアドレスとパスワードでログインしてください。  
 
-1. 固定管理者名：管理者 太郎（メール認証済み）  
+1. 固定管理者名：管理者 太郎   
 - メールアドレス：admin@example.com  
 - パスワード：admin123  
   
@@ -20,13 +20,15 @@
 - メールアドレス：user@example.com  
 - パスワード：password123  
   
-※ 上記アカウントは、php artisan migrate:fresh --seed を実行した場合に再作成されます。パスワードは暗号化（ハッシュ化）されていますが、上記で記載した平文パスワードでログイン可能です。    
+※ 上記アカウントは、php artisan migrate:fresh --seed を実行した場合に再作成されます。パスワードは暗号化（ハッシュ化）されていますが、上記で記載した平文パスワードで即ログイン可能です。    
 
 ### メール認証について  
-- 登録後、自動でメール認証画面に遷移します。
+- 新規登録ユーザーはメール認証必須です。  
+- 上記固定ユーザー以外のダミーユーザーは通常どおり email_verified_at = null で作成されます。  
+- 新規登録後は、自動でメール認証画面に誘導され、認証完了後に勤怠画面に遷移します。  
 - メール送信の確認には MailHog というツールを使用しています。
-- MailHog は docker-compose で自動的に起動します。追加の設定や会員登録は不要です。
-- MailHog を起動した状態で、ブラウザから [http://localhost:8025](http://localhost:8025) にアクセスすると送信されたメールを確認できます。
+- MailHog は docker-compose で自動的に起動します。追加の設定や会員登録は不要です。  
+- DockerでMailHogを起動 (docker-compose up -d mailhog)した状態で、ブラウザから [http://localhost:8025](http://localhost:8025) にアクセスすると送信されたメールを確認できます。  
 
 ### Dockerビルド
 1. git clone https://github.com/morikoshi2627/KintaiApp.git  
