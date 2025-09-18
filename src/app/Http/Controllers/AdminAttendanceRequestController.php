@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\AttendanceRequest;
-use App\Models\Attendance;
 
 class AdminAttendanceRequestController extends Controller
 {
@@ -75,6 +74,8 @@ class AdminAttendanceRequestController extends Controller
             }
         }
 
-        return redirect()->route('admin.requests', ['status' => 'approved']);
+        return redirect()
+            ->route('admin.request.detail', $attendanceRequest->id);
+
     }
 }

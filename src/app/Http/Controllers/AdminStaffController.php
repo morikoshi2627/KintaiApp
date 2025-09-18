@@ -18,10 +18,4 @@ class AdminStaffController extends Controller
 
         return view('admin.user.index', compact('users'));
     }
-
-    /* 特定スタッフの勤怠一覧 */
-    public function attendances($user)
-    {
-
-    }
 }
